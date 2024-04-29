@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Graphic Editor</title>
+  <style>
+    #canvas {
+      border: 1px solid black;
+    }
+    
+    .color {
+      width: 30px;
+      height: 30px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <div>
+    <div>
+      <span>Select color:</span>
+      <div class="color" style="background-color: red;"></div>
+      <div class="color" style="background-color: blue;"></div>
+      <div class="color" style="background-color: green;"></div>
+      <div class="color" style="background-color: yellow;"></div>
+    </div>
+    <button id="clear">Clear</button>
+  </div>
+  
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const colors = document.querySelectorAll('.color');
+    const clearButton = document.getElementById('clear');
+    
+    let isDrawing = false;
+    let currentColor = 'black';
+    
+    colors.forEach(color => {
+      color.addEventListener('click', () => {
+        currentColor = color.style.backgroundColor;
+      });
+    });
+    
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+      ctx.strokeStyle = currentColor;
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+      if (isDrawing) {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+      }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+      isDrawing = false;
+    });
+    
+    clearButton.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  </script>
+</body>
+</html>
